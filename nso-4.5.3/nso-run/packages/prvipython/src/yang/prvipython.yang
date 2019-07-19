@@ -1,0 +1,172 @@
+module prvipython {
+
+  namespace "http://example.com/prvipython";
+  prefix prvipython;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  typedef filter-target {
+      type enumeration {
+        enum "ACCEPT";
+        enum "DROP";
+        enum "QUEUE";
+        enum "RETURN";
+        enum "LOGANDDROP"; // custom chain
+      }
+    }
+
+   typedef chain {
+      type enumeration {
+        enum "INPUT";
+        enum "OUTPUT";
+        enum "FORWARD";
+      }
+   }
+   typedef protocol {
+       type enumeration {
+         enum "tcp";
+         enum "udp";
+         enum "icmp";
+         enum "esp";
+         enum "all";
+       }
+   }
+
+   typedef address {
+       type union {
+         type inet:ipv4-address;
+         type tailf:ipv4-address-and-prefix-length;
+         type inet:ipv6-address;
+         type tailf:ipv6-address-and-prefix-length;
+         type string;
+         type enumeration {
+           enum "any";
+         }
+       }
+    }
+
+  //cemu onda sluzi container kad ga ne vidi korisnik je li je onda on za neke trigere
+  container actions {
+      tailf:action BLABLA {
+            tailf:actionpoint kicker-action;
+            input {
+                leaf device{
+                    type leafref{
+                        path "/ncs:devices/ncs:device/ncs:name";
+                    }
+                }
+            }
+            output {
+                leaf num_of_devices{
+                    type int8;
+                }
+            }
+      }
+  }
+
+  list prvipython {
+    key name;
+    uses ncs:service-data;
+    ncs:servicepoint prvipython;
+
+    tailf:action device-print {
+        tailf:actionpoint kicker-action;
+        input {
+           leaf device{
+                   type leafref{
+                       path "/ncs:devices/ncs:device/ncs:name";
+                   }
+               }
+        }
+        output {
+           leaf device{
+                   type string;
+               }
+        }
+    }
+
+    tailf:action print_num_of_rules {
+                tailf:actionpoint kicker-action;
+                input {
+                    leaf device{
+                        type leafref{
+                            path "/ncs:devices/ncs:device/ncs:name";
+                        }
+                    }
+                }
+                output {
+                    leaf num_of_devices{
+                        type int8;
+                    }
+                }
+    }
+
+    //ne mora se sve zapisivat u yang modelu
+    leaf name{
+        type string;
+    }
+
+    leaf device{
+    //zaboravio sam stavit da je mandatory
+        type leafref{
+            path "/ncs:devices/ncs:device/ncs:name";
+        }
+    }
+
+    list chain {
+      key chain;
+      leaf chain{
+        type chain;
+      }
+
+
+      list rule {
+        key index;
+        leaf index {
+          type uint32{
+            range 1..4294967295;
+          }
+        }
+
+        leaf protocol {
+          mandatory true;
+          type protocol;
+        }
+
+        leaf source {
+          mandatory true;
+          type address;
+        }
+
+        leaf destination {
+          mandatory true;
+          type address;
+        }
+
+        leaf in-interface {
+          type string;
+          when '../../chain="INPUT" or ../../chain="FORWARD"';
+        }
+
+        leaf out-interface {
+          type string;
+          when '../../chain="OUTPUT" or ../../chain="FORWARD"';
+        }
+
+
+        leaf jump {
+           mandatory true;
+           type filter-target;
+         }
+       }
+     }
+  }
+}

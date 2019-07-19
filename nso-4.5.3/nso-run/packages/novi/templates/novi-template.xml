@@ -1,0 +1,23 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0"
+                 servicepoint="novi">
+<devices xmlns="http://tail-f.com/ns/ncs">
+  <device tags="merge">
+    <name>{/name}</name>
+    <address>{/address}</address>
+    <port>{/port}</port>
+    <authgroup>{/authgroup}</authgroup>
+    <device-type>
+      <cli>
+        <ned-id xmlns:ios-id="urn:ios-id" when="{/device-type='cisco-ios'}">ios-id:cisco-ios</ned-id>
+        <ned-id xmlns:cisco-ios-xr-id="http://tail-f.com/ned/cisco-ios-xr-id" when="{/device-type='cisco-ios-xr'}">cisco-ios-xr-id:cisco-ios-xr</ned-id>
+        <ned-id xmlns:iptables-id="http://tail-f.com/ns/neds/linux-iptables-id" when="{/device-type='iptables'}">iptables-id:linux-iptables</ned-id>
+        <protocol>{/protocol}</protocol>
+      </cli>
+    </device-type>
+    <state>
+      <admin-state>unlocked</admin-state>
+    </state>
+  </device>
+</devices>
+</config-template>
+

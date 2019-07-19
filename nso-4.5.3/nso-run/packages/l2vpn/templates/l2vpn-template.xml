@@ -1,0 +1,88 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0"
+                 servicepoint="l2vpn">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+<!-- device1 -->
+    <device tags="noncreate">
+      <name>{/device1}</name>
+      <config tags="merge">
+<!-- device1/ios -->
+        <interface xmlns="urn:ios">
+          <GigabitEthernet>
+            <name>{/intf-number1}</name>
+            <xconnect>
+              <address>{/remote-ip1}</address>
+              <vcid>{/pw-id}</vcid>
+              <encapsulation>mpls</encapsulation>
+            </xconnect>
+          </GigabitEthernet>
+        </interface>
+        <!--device1/ios-xr -->
+        <interface xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <GigabitEthernet>
+            <id>{/intf-number1}</id>
+            <l2transport/>
+          </GigabitEthernet>
+        </interface>
+        <l2vpn xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <xconnect>
+            <group>
+              <name>GROUP</name>
+              <p2p>
+                <name>{/name}</name>
+                <interface>
+                  <name>GigabitEthernet{/intf-number1}</name>
+                </interface>
+                <neighbor>
+                  <address>{/remote-ip1}</address>
+                  <pw-id>{/pw-id}</pw-id>
+                </neighbor>
+              </p2p>
+            </group>
+          </xconnect>
+        </l2vpn>
+      </config>
+    </device>
+    <!-- device1 -->
+    <device>
+      <name>{/device2}</name>
+      <config tags="merge">
+        <!-- device2/ios -->
+        <interface xmlns="urn:ios">
+          <GigabitEthernet>
+            <name>{/intf-number2}</name>
+            <xconnect>
+              <address>{/remote-ip2}</address>
+              <vcid>{/pw-id}</vcid>
+              <encapsulation>mpls</encapsulation>
+            </xconnect>
+          </GigabitEthernet>
+        </interface>
+
+        <!--device2/ios-xr -->
+        <interface xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <GigabitEthernet>
+            <id>{/intf-number2}</id>
+            <l2transport/>
+          </GigabitEthernet>
+        </interface>
+        <l2vpn xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <xconnect>
+            <group>
+              <name>GROUP</name>
+              <p2p>
+                <name>{/name}</name>
+                <interface>
+                  <name>GigabitEthernet{/intf-number2}</name>
+                </interface>
+                <neighbor>
+                  <address>{/remote-ip2}</address>
+                  <pw-id>{/pw-id}</pw-id>
+                </neighbor>
+              </p2p>
+            </group>
+          </xconnect>
+        </l2vpn>
+      </config>
+    </device>
+  </devices>
+</config-template>

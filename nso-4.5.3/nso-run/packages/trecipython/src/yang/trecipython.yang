@@ -1,0 +1,50 @@
+module trecipython {
+
+  namespace "http://example.com/trecipython";
+  prefix trecipython;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+
+  list trecipython {
+
+      key device;
+
+      leaf device{
+          type leafref{
+              path "/ncs:devices/ncs:device/ncs:name";
+          }
+      }
+      leaf address{
+           mandatory true;
+           type inet:ipv4-address;
+      }
+      leaf port{
+           type uint32 {
+             range "0..65535";
+          }
+           default 22;
+      }
+      leaf authgroup{
+             type leafref{
+                 path "/ncs:devices/ncs:authgroups/ncs:group/ncs:name";
+            }
+      }
+
+      uses ncs:service-data;
+      ncs:servicepoint trecipython-servicepoint;
+
+
+      tailf:action sync-from{
+        tailf:actionpoint trecipython-actionpoint;
+      }
+  }
+}

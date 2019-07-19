@@ -1,0 +1,63 @@
+module drugipython {
+
+  namespace "http://example.com/drugipython";
+  prefix drugipython;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  list actions{
+      key name;
+      leaf name{
+        type string;
+      }
+
+      ncs:servicepoint "drugipython-servicepoint";
+      uses ncs:service-data;
+
+      tailf:action insert {
+          tailf:actionpoint my-kicker-action;
+          input {
+              leaf device{
+                  mandatory true;
+                  type leafref{
+                      path "/ncs:devices/ncs:device/ncs:name";
+                  }
+              }
+              leaf address{
+                   mandatory true;
+                   type inet:ipv4-address;
+              }
+              leaf port{
+                   type uint32 {
+                     range "0..65535";
+                  }
+                   default 22;
+              }
+              leaf authgroup{
+                     type leafref{
+                         path "/ncs:devices/ncs:authgroups/ncs:group/ncs:name";
+                    }
+              }
+          }
+          output {
+              leaf result {
+                  type string;
+              }
+          }
+      }
+
+  }
+}

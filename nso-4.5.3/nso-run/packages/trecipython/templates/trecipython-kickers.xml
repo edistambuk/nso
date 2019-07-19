@@ -1,0 +1,10 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+    <kickers xmlns="http://tail-f.com/ns/kicker">
+        <data-kicker>
+            <id>trecipython_sync_from_trigger{$DEVICE}</id>
+            <monitor>/trecipython[device="{$DEVICE}"]</monitor>
+            <kick-node>/trecipython[device="{$DEVICE}"]</kick-node>
+            <action-name>sync-from</action-name>
+        </data-kicker>
+    </kickers>
+</config>

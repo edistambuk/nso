@@ -1,0 +1,57 @@
+module novi {
+  namespace "http://com/example/novi";
+  prefix novi;
+
+  import ietf-inet-types {
+      prefix inet;
+  }
+  import tailf-ncs {
+      prefix ncs;
+  }
+
+  list device {
+    key name;
+
+    ncs:servicepoint "novi";
+    uses ncs:service-data;
+
+    leaf name {
+       type string;
+    }
+
+    // may replace this with other ways of refering to the devices.
+    leaf device-type {
+      mandatory true;
+      type enumeration{
+        enum cisco-ios;
+        enum cisco-ios-xr;
+        enum iptables;
+      }
+    }
+
+    leaf protocol {
+        type string;
+        default "ssh";
+    }
+
+    // replace with your own stuff here
+    leaf address {
+      mandatory true;
+      type inet:ipv4-address;
+    }
+
+    leaf port {
+       type uint32 {
+          range "0..65535";
+       }
+        default 22;
+    }
+
+    leaf authgroup {
+       mandatory true;
+       type leafref{
+            path "/ncs:devices/ncs:authgroups/ncs:group/ncs:name";
+       }
+    }
+  }
+}

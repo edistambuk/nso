@@ -1,0 +1,20 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+    <devices xmlns="http://tail-f.com/ns/ncs">
+        <device tags="merge">
+            <name>{$DEVICE}</name>
+            <address>{$ADDRESS}</address>
+            <port>{$PORT}</port>
+            <authgroup>{$AUTHGROUP}</authgroup>
+            <device-type>
+                <cli>
+                    <ned-id xmlns:iptables-id="http://tail-f.com/ns/neds/linux-iptables-id">iptables-id:linux-iptables</ned-id>
+                    <protocol>telnet</protocol>
+                </cli>
+            </device-type>
+            <state>
+                <admin-state>unlocked</admin-state>
+            </state>
+
+        </device>
+    </devices>
+</config-template>

@@ -1,0 +1,37 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+    <devices xmlns="http://tail-f.com/ns/ncs">
+        <device tags="merge">
+            <name>{$NAME}</name>
+            <config tags="merge">
+                <chain xmlns="http://tail-f.com/ned/linux-iptables">
+                    <chain>{$WHERE}</chain>
+                    <rule-input  when="{$WHERE='INPUT'}">
+                        <index>{$INDEX}</index>
+                        <protocol>{$PROTOCOL}</protocol>
+                        <source>{$SOURCE}</source>
+                        <destination>{$DESTINATION}</destination>
+                        <in-interface>{$INTERFACE_IN}</in-interface>
+                        <jump>{$JUMP}</jump>
+                    </rule-input>
+                    <rule-output when="{$WHERE='OUTPUT'}">
+                        <index>{$INDEX}</index>
+                        <protocol>{$PROTOCOL}</protocol>
+                        <source>{$SOURCE}</source>
+                        <destination>{$DESTINATION}</destination>
+                        <out-interface>{$INTERFACE_OUT}</out-interface>
+                        <jump>{$JUMP}</jump>
+                    </rule-output>
+                    <rule-forward when="{$WHERE='FORWARD'}">
+                        <index>{$INDEX}</index>
+                        <protocol>{$PROTOCOL}</protocol>
+                        <source>{$SOURCE}</source>
+                        <destination>{$DESTINATION}</destination>
+                        <in-interface>{$INTERFACE_IN}</in-interface>
+                        <out-interface>{$INTERFACE_OUT}</out-interface>
+                        <jump>{$JUMP}</jump>
+                    </rule-forward>
+                </chain>
+            </config>
+        </device>
+    </devices>
+</config-template>
